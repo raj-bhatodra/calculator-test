@@ -16,7 +16,7 @@ jobs:
 
     - name: Login to Docker Hub
       run: 
-        echo ${{ secrets.PASSWORD }} ${{ secrets.USERNAME }} 
+        docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }} 
 
 
     #- name: Build and push Docker image
