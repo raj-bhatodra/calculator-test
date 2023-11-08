@@ -1,0 +1,62 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: |
+        # Your Docker image build command goes here
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        
+    - name: Build Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false  # Do not push the image yet
+        tags: ${{ secrets.USERNAME }}/tf-project:latest
+
+    # Approval Step
+    - name: Request Approval
+      id: approval
+      run: |
+        # You can add a comment to request approval from a specific reviewer or team
+        # Example: Request approval from a user or team
+        echo "Please review and approve this pull request" > approval-comment.txt
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Check Approval Status
+      id: check_approval
+      run: |
+        # Check if the pull request has been approved
+        if curl --header "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$GITHUB_REF/reviews?per_page=100" | jq '.[].state' | grep -q -E 'approved'; then
+          echo "::set-output name=approved::true"
+        else
+          echo "::set-output name=approved::false"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy Docker Image
+      if: steps.check_approval.outputs.approved == 'true'
+      run: |
+        # Your Docker image push and deployment commands go here
+        docker push ${{ secrets.USERNAME }}/tf-project:latest
+      env:
+        DOCKER_PASSWORD: ${{ secrets.PASSWORD }}
