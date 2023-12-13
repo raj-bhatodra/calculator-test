@@ -3,7 +3,7 @@ steps:
   args: ['build', '-t', 'gcr.io/big-query-406006/testreact-app', '.']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['container', 'clusters', 'get-credentials', 'your-cluster-name', '--region', 'your-region']
+  args: ['container', 'clusters', 'get-credentials', 'autopilot-cluster-1', '--region', 'us-central1']
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'deployment.yaml', '-f', 'service.yaml']
