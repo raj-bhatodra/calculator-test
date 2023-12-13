@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/big-query-406006/testreact-app', '.']
+images: ['gcr.io/big-query-406006/testreact-app']
+
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['apply', '-f', 'deployment.yaml', '-f', 'service.yaml']
