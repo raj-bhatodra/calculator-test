@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testreact-app
+spec:
+  replicas: 3  # adjust based on your requirements
+  selector:
+    matchLabels:
+      app: testreact-app
+  template:
+    metadata:
+      labels:
+        app: testreact-app
+    spec:
+      containers:
+      - name: testreact-app
+        image: gcr.io/big-query-406006/testreact-app:latest  
+        ports:
+        - containerPort: 3000
