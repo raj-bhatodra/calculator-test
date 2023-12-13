@@ -6,15 +6,6 @@ steps:
   args: ['container', 'clusters', 'get-credentials', 'autopilot-cluster-1', '--region', 'us-central1']
 
 - name: 'gcr.io/cloud-builders/kubectl'
-  args:
-    - 'config'
-    - 'use-context'
-    - 'gke_big-query-406006_us-central1_autopilot-cluster-1'  # Replace with your cluster context
-    - '&&'
-    - 'apply'
-    - '-f'
-    - 'deployment.yaml'
-    - '-f'
-    - 'service.yaml'
-
+  args: ['container', 'clusters', 'get-credentials', 'autopilot-cluster-1', '--region', 'us-central1']
+  
 logsBucket: 'gs://logsbuild'
