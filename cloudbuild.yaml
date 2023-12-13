@@ -7,3 +7,5 @@ steps:
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'deployment.yaml', '-f', 'service.yaml']
+
+logsBucket: 'gs://logsbuild'
